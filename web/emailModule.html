@@ -1,0 +1,305 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<body>
+
+<style type="text/css">
+	#emailContents {
+		left: 225px;
+		top: 0px; bottom:0px; right:0px; position: absolute; z-index:1;
+		/*
+		overflow-y:hidden;
+		took out overflow hidden. we need the letters to slide left outside the area to have
+		2 letters side-by-side, and can't have emailContents overlap the big buttons since that would
+		prevent click events.
+		*/
+	}
+	#composeEmail, .emailWrapper {
+		position:absolute;
+	}
+	#emailSubject {
+		font-size: 20px;
+		width: 470px;
+		padding: 2px 10px;
+
+		/* though the position and z-index doesn't makes sense we need it because #message overlaps.
+		should fix this, but the #message is manipulated all over the animation code, so too much
+		work for now (jacob) */
+		position:absolute;
+		z-index:1;
+	}
+
+	.addressField {
+		border-bottom: 1px dashed #81BEF7;
+		font-weight: bold;
+		font-size:18px;
+	}
+	#composeEmail * .addressField {
+		position: absolute;
+		left: 10px;
+		top: 0px;
+		position: absolute;
+		width: 400px;
+		padding: 35px 35px 0px 35px;
+	}
+        	#composeEmailFacade * .addressField {
+		position: absolute;
+		left: 10px;
+		top: 0px;
+		position: absolute;
+		width: 400px;
+		padding: 35px 35px 0px 35px;
+	}
+
+	/** this looks like the background for inputpaper and one day should be used instead of that to wrap the compose email part*/
+	#composeLetterWrapper {
+		position:absolute; left:0px; top:0px;
+		/*
+		width: 488px;
+		*/
+		padding:35px;
+		background:white;
+
+		border:1px solid black;
+		-webkit-box-shadow: 2px 2px 4px 0px #616161;
+		-moz-box-shadow: 2px 2px 4px 0px #616161;
+		box-shadow: 2px 2px 4px 0px #616161;
+	}
+
+	#inputpaper {
+		font-size:18px; font-weight:bold;
+		padding:  75px 35px 55px;
+		overflow: none;
+		resize:none;
+		border:0;
+		width:488px;
+		height:650px;
+		background: url('images/mail/inputpaper.png') no-repeat left top;
+
+		/* uncomment to make it look like a letter and remove the background image...
+		... but it messes up the animations, so beware those need to be fixed (jacob)
+
+		border:1px solid black;
+		-webkit-box-shadow: 2px 2px 4px 0px #616161;
+		-moz-box-shadow: 2px 2px 4px 0px #616161;
+		box-shadow: 2px 2px 4px 0px #616161;
+		*/
+	}
+        	#inputpaperFacade {
+		font-size:20px;font-weight: bold;
+		padding:  75px 35px 55px;
+		overflow: none;
+		resize:none;
+		border:0;
+		width:488px;
+		height:650px;
+		background: url('images/mail/inputpaper.png') no-repeat left top;
+
+		/* uncomment to make it look like a letter and remove the background image...
+		... but it messes up the animations, so beware those need to be fixed (jacob)
+
+		border:1px solid black;
+		-webkit-box-shadow: 2px 2px 4px 0px #616161;
+		-moz-box-shadow: 2px 2px 4px 0px #616161;
+		box-shadow: 2px 2px 4px 0px #616161;
+		*/
+	}
+
+button {
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	-moz-box-shadow:0px 0px 2px rgba(0,0,0,0.4);
+	-webkit-box-shadow:0px 0px 2px rgba(0,0,0,0.4);
+
+	color:rgba(0,0,0,1);
+	text-shadow:1px 1px 0px rgba(255,255,255,0.8);
+	border:1px solid rgba(0,0,0,0.5);
+	font-size:20px;
+        
+
+	background:-webkit-gradient(linear,0% 0%,0% 100%,from(rgba(255,255,255,1)),to(rgba(185,185,185,1)));
+	background:-moz-linear-gradient(top,rgba(255,255,255,1),rgba(185,185,185,1));
+
+	padding:5px 20px 5px 20px;
+}
+
+
+
+button:active {
+	background:#000000;
+	color:#ffffff;
+}
+
+
+
+</style>
+
+
+<!-- the button needs a z-index because the open mailbox flap overlaps the photoalbum  -->
+<!--
+<a id="mail" class="button" href="javascript:clickModuleButton('emailModule')" style="top:0px; left:0px; position:absolute; text-decoration:none; z-index:1;">
+	<img id="mailbox" src="images/mail/mailbox_c.png" />
+	<img style="position:absolute; top:10px; right:-15px;"src="images/mail/call1.png">
+
+	<div style="position:absolute; top:48px; right:-11px; width:100px; text-align:center;">
+		<h1 id="new_emails" style="color:white; border:none; margin:0px; font-size:24px; font-weight:bold;">
+			Checking
+		</h1>
+	</div>
+</a>
+ -->
+
+ <!-- ipad optimization -->
+ 
+    	<div id="composeEmailFacade"  r='unread' t='none' in='c' style="display:none;position: absolute;left:200px">
+
+		<div class='envcontents' style='width:355px'>
+			<!-- this is a logical wrapper, not actual wrapper to the text input -->
+			<div id='letter' style='top:132px;left:25px; position:absolute; '>
+				<!--
+				<div id="emailSubject">
+					Subject <input id="emailSubjectText" type="text" style="width: 350px;font-size: 18px;">
+				</div>
+				 -->
+				<div class="addressField">
+                                    <span id="toInLetterFacade">To </span>&nbsp;<span id="composeEmailTo"></span>
+				</div>
+				<textarea id='inputpaperFacade' scroll=no></textarea>
+
+				<div id='message' style="position: absolute;width: 460px; top: 580px; left: 25px;">
+					<button class='send' id="sendFacade" style=' top:580px; left:25px;'>
+						Send
+					</button>
+					<button class='throwaway' id="throwawayFacade"style='  position:absolute; position: absolute; right:20px; '>
+						Throw Away
+					</button>
+				</div>
+			</div>
+		</div>
+	</div> <!-- /composeEmail -->
+	<div id="composeEmail"  r='unread' t='none' in='c' style="display:none;">
+		<img src='images/mail/mailinbox.png' id='mailinbox' style='display:none'>
+		<div class='envcontents' style='width:355px'>
+			<!-- blank envelope back (address side) -->
+			<img id='envelope' src='images/mail/envelope.png' style="position:absolute;">
+
+			<!-- envelope's open flap -->
+			<img id='rot2' src='images/mail/fullback2_1.png' style='position:absolute; display:none; top:11px;' />
+
+			<!-- this is a logical wrapper, not actual wrapper to the text input -->
+			<div id='letter' style='top:132px;left:25px; position:absolute; '>
+				<!--
+				<div id="emailSubject">
+					Subject <input id="emailSubjectText" type="text" style="width: 350px;font-size: 18px;">
+				</div>
+				 -->
+				<div style="display:none">
+                                    <span id="toInLetter">To </span><span id="composeEmailTo"></span>
+				</div>
+				<textarea id='inputpaper' scroll=no></textarea>
+				<img id='paper' src='images/mail/paper2.png' />
+				<div id='message' style="position: absolute;width: 460px; top: 580px; left: 25px;">
+					<button class='send' onclick="sendHandler(this)"id="sendButtonContent" style=' padding-left:10px; top:580px; left:25px; font-size:19px;'>
+						Send
+					</button>
+					<button class='throwaway' onclick="throwAwayReplyHandler(this);" id="throwAwayButtonContent2" style=' font-size:19px;padding-left:10px;  padding-right:10px; position:absolute; position: absolute; right:20px; '>
+						Throw Away
+					</button>
+				</div>
+			</div>
+			<img src='images/mail/back2_2.png' id='rot3' style='position:absolute; top: 128px; display:none;'/>
+			<img src='images/mail/uflap.png'   id='rot1' style='position:absolute; top: 128px; display:none '/>
+		</div>
+		<div id='frontcontents' style='display:none;'>
+			<div style='position:absolute; left: 12px; top: 5px; font:Times New Roman; font-size:20px' id="fromInEnvelope"> From</div>
+			<div id="senderAddress" style='position:absolute; left: 12px; top: 29px; font:Times New Roman; font-size:20px;width:191px'></div>
+			<div style='position:absolute; left: 120px; top: 104px; font:Times New Roman; font-size:20px' id="toInEnvelope"> To</div>
+			<div id="recepientAddress" style='position:absolute; width:400px; left: 120px; top: 128px; font:Times New Roman; font-size:20px'></div>
+			<div style='position:absolute; left: 214px; top: 74px; font:Times New Roman; font-size:13px; color:66665c'></div>
+			<img src='images/mail/sframe1.png' style='position:absolute; left: 281px; top: 5px;'>
+			<img src="images/contacts/unknownUser.jpg"  style='position:absolute; left: 288px; top: 11px; width:48px; height:56px;'>
+		<div style='position:absolute; left: 285px; top: 15px;' ></div><div style='position:absolute; left: 195px; top: 40px;' ></div></div>
+	</div> <!-- /composeEmail -->
+
+	<img id='truck' src='images/mail/truck.png' style="position: absolute; top:0px; display:none;">
+	<img id="truckEnvelope" src="images/mail/truckEnvelope.png" style="position:absolute; display:none;">
+
+<div id="emailContents" style="display:none;">
+
+
+
+<div style="position: absolute; right:150px;color:#333333;font-size: 30px;bottom: 200px;" id="touchEmailInstruction"> Touch Envelope to open</div>
+
+
+
+	<!-- the trash, tray, truck, etc are in same container as emails, so the offsets for animations are all relative -->
+        <div class="button" onmousedown="javascript:clickModuleButton('contactsModuleEmail')" style="position:absolute; bottom:5px; left:410px;height:50px"><table><tr><td><img src="images/contacts/contact.png" style="width:40px;height:40px;margin:5px;"> </td><td style="padding-top:15px;font-size: 22px; color: #ffffff;"><span id="writeMailContent">Write Mail</span></td></tr></table> </div>
+	<img id="emailTray" src="images/mail/desk.png" style="position:absolute; bottom:10px; left:10px;">
+	<img id="trashLip" class="trash" src="images/mail/trash1_1.png" style="position:absolute; bottom:97px; right:10px;">
+	<img id="trash" class="trash" src="images/mail/trash1_2.png" style="position:absolute; bottom:10px; right:10px;">
+	<!--
+	<img id="trashHighlight" src="images/mail/trashHighlight.png" style="position:absolute; bottom:10px; right:10px; display:none;">
+	 -->
+
+
+
+	<!-- anEmail is one letter. it will be cloned for each email:
+		#anEmail attributes:
+			r = [read, unread];
+			t = [tray, trash, none];
+			in = i think it's flag if the envelope is open or not, [o, c]
+		$body = email body
+		$from = from address
+	 -->
+	<div id="anEmail" class="emailWrapper" r='read' t='none' in='c'>
+		<!-- angled envelope coming from inbox -->
+		<img src='images/mail/mailinbox.png' class='mailinbox' style='display:none'>
+
+		<div class='envcontents' style='display:none; width:355px'>
+			<img src='images/mail/envelope.png'   id='envelope' style="position:absolute;"/>
+			<img src='images/mail/fullback2_1.png'  id='rot2' style='position:absolute; display:none; top:11px;' />
+			<div id='letter' style='display:none; top:132px;left:25px; position:absolute; '>
+				<img id='paper' src='images/mail/paper2.png' />
+		    	<div id='message' style='position:absolute; width:400px; padding: 35px;  font:Times New Roman; font-size:18px; '>
+		    		<div class="addressField"><span id="fromInLetter">From </span><span class="$name"></span></div>
+		    		<div class="$body" style="white-space: pre-wrap; height: 500px; overflow-y: auto;">Please wait for a moment while we get your mail...</div>
+				
+                                        <button onclick="replyHandler(this);" class='reply' style=' position:absolute; top:580px;left: 10px;'><span id="replyButtonContent"> Reply</span></button>
+					<button class='close' style=' position:absolute; top:580px; margin-left:130px; '><span id="keepButtonContent"> Keep</span></button>
+					<button class='throwaway' onclick="throwAwayHandler(this);"style='position:absolute; top:580px; left: 315px; position: absolute; '><span id="throwAwayButtonContent"> Throw Away</span></button>
+		        </div>
+			</div>
+			<img src='images/mail/back2_2.png'   id='rot3' style='position:absolute; top: 128px; display:none;'/>
+			<img src='images/mail/uflap.png'  id='rot1' style='position:absolute; top: 128px; display:none '/>
+		</div>
+
+		<div id='frontcontents' style='display:none;'>
+			<div style='position:absolute; left: 12px; top: 5px; font:Times New Roman; font-size:18px' id="from"> From</div>
+
+			<div style='position:absolute; left: 12px; top: 29px; font-size:18px;width:191px' class="$from"></div>
+			<div style='position:absolute; left: 90px; top: 104px; font-size:18px' id="to"> To</div>
+			<div id="emailToAddress" style='position:absolute; left: 90px; top: 128px; font-size:18px; width: 250px;'></div>
+			<div style='position:absolute; width:330px; left: 10px; top:200px; font:Times New Roman; font-size:18px; color:#333333'>
+                            <span id="about">About: </span><span class="$subject"></span>
+			</div>
+
+			<!-- profile picture and frame -->
+			<div style="position:absolute;  left: 281px; top: 5px; width:62px; height:68px; overflow:hidden;">
+				<img class="senderProfilePicture" src='images/contacts/unknownUser.jpg'  style='margin:7px; max-width:54px; max-height:60px;'>
+				<img src='images/mail/sframe1.png' style="position:absolute; top:0px; left:0px;">
+			</div>
+
+			<img src='images/mail/seal2_1.png' style='position:absolute; left: 285px; top: 15px;'>
+			<img src='images/mail/seal3_2.png'style='position:absolute; left: 195px; top: 40px;'>
+			<div class="$dateSent" style='position:absolute; left: 204px; top: 68px; font-weight: bold;font-size:11px; width:75px; text-align: center;'></div>
+
+		</div>
+	</div> <!-- /anEmail -->
+
+
+	<!-- node that is used for writing and replying to emails -->
+
+
+</div> <!-- /emailContents -->
+
+</body>
+</html>

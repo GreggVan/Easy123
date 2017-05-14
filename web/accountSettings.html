@@ -1,0 +1,339 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<script type="text/javascript" src="javascripts/jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="javascripts/jquery.form.js"></script>
+	<script type="text/javascript" src="javascripts/jquery-ui-1.8.13.custom.min.js"></script>
+	<script type="text/javascript" src="javascripts/json2.js"></script>
+	<script type="text/javascript" src="javascripts/jkarma.js"></script>
+	<script type="text/javascript" src="javascripts/utils.js"></script>
+	<script type="text/javascript" src="javascripts/main.js"></script>
+
+	<LINK rel="stylesheet" type="text/css" href="resources/style.css">
+</head>
+<body>
+
+<style type="text/css">
+	body {
+		padding:30px;
+		font-size:14px;
+	}
+	.sectionContainer {
+		position:relative; width:800px; border:1px solid #aaa; background:white;
+		margin-bottom: 20px;
+	}
+	.formNote {
+		margin-left:140px; color: #aaa; font-style: italic; margin-bottom:10px;
+	}
+	.nameLink { padding:3px 10px; display:block; cursor:pointer; color:#333; }
+	.selected {
+		background-color: rgb(167, 188, 199);
+	}
+	.selected > .nameLink { color:white; }
+
+	.listHeader {
+		width:230px;
+		height:30px;
+		background:#ddd;
+		border-right:1px solid #aaa; border-bottom:1px solid #aaa;
+		color:black;
+		padding:6px 10px 0px;
+		border-top-left-radius:10px;
+	}
+	.listColumn {
+		background-color: rgb(221,231,239); position:absolute; overflow-y:scroll;
+		overflow-x:hidden;
+		width:250px; top:37px; bottom:0px; border-right:1px solid #aaa; border-bottom-left-radius:10px;
+	}
+	.smallButton {
+		border:1px solid #666;
+		padding: 1px 10px;
+		text-decoration:none;
+		background:#fff;
+		display:inline-block;
+		color:black;
+		text-align:center;
+		margin-left:10px;
+		border-radius:5px;
+	}
+
+	h1, h2 {
+		padding:0px;
+		font-family:Helvetica;
+		color:#aaa;
+		font-size:25px;
+		font-weight:normal;
+		border:none;
+	}
+	h2 { font-size:20px; }
+	#profilePicture {
+		max-height:200px;
+	}
+        .preview {
+            -moz-box-shadow: 0 2px 4px #333333;
+            -webkit-box-shadow: 0 2px 4px #333333;
+            box-shadow: 0 2px 4px #333333;          
+        }
+</style>
+
+
+
+<script type="text/javascript">
+	var user;
+
+	//initialize this page
+	$(document).ready(function() {
+		$('.dialog').draggable();
+
+		//this is called on success for uploading a profile picture
+	    $('#profilePictureForm').ajaxForm(function() {
+	    	document.forms.profilePictureForm.file.value='';
+	        selectedContact.hasProfilePicture = true;
+	        $('#profilePicture').attr('src', selectedContact.profilePicture());
+	    });
+
+		//get the contacts data and render the page
+		sendRequest("account", {action:"getData"}, function(response){
+			user = response.user;
+			showUser(user);
+ 			if(user.contacts.length>0) {
+				jKarmaAddFunction(user.contacts, 'profilePicture', profilePicture);
+				jKarma.display('#aContact', user.contacts);
+				$('#aContact > a').click(); //select first in list
+			}
+		});
+	});
+
+	function saveUserInfo() {
+		var request = {
+			action:'saveAccountInfo'
+		}
+		jKarma.encodeForm('#accountInfo', request);
+		log(request);
+		$('#loading').show();
+		sendRequest('account', request, function(response) {
+			if(response.userKeyNotUnique) {
+				showMessagePopup(response.userKeyNotUnique);
+			}
+			user = response.user;
+			showUser(user);
+		});
+		return false;
+	}
+
+	function showUser(user) {
+		//TODO could make accounts dynamic when more can be created, but for not just hard-code it for gmail
+		if(user.accounts.length>0) {
+			user.gmailAddress = user.accounts[0].email;
+			user.gmailPassword = user.accounts[0].password;
+
+		}
+
+		//generate the direct login urls
+		var url = window.location.href;
+		url = url.substr(0, url.lastIndexOf('/')+1);
+		user.directUserLogin = url + 'user/' + user.userKey;
+		user.directAssistantLogin = url + 'assistant/' + user.userKey;
+
+
+		jKarma.display('#accountInfo', user);
+                $('.preview').attr('src','images/contacts/'+user.contactBookType+".png");
+
+
+	}
+
+
+	/** added to a contact object to return an url for its contact picture. */
+	function profilePicture() {
+		if(this.hasProfilePicture) {
+			//the pictureAccessCount is added to make each url unique, so changing pictures doesn't use a cached image
+			if(!this.pictureAccessCount) {
+				this.pictureAccessCount = 1;
+			}
+			return 'file?action=profile&id=' + this.id + '&accessCount=' + this.pictureAccessCount++;
+		}
+		else {
+			return "images/contacts/unknownUser.jpg";
+		}
+	}
+
+	function getTestData() {
+		return [
+			{firstName:'Karma', lastName:'Mouka', email:'k@you.com'},
+			{firstName:'Jacob', lastName:'Mouka', email:'k@you.com'}
+		];
+
+	}
+	function selectContact(person, link) {
+		$('#contacts .selected').removeClass('selected');
+		$(link.parentNode).addClass('selected');
+		jKarma.display('#contactDetails',person);
+		selectedContact = person;
+		if(person.id) {
+			$('#profilePictureForm').show();
+		}
+		else {
+			$('#profilePictureForm').hide();
+		}
+	}
+
+	function saveContact() {
+		jKarma.encodeForm('#contactForm', selectedContact);
+		$('#contacts').find('.selected  .\\$firstName').html(selectedContact.firstName);
+		$('#contacts').find('.selected  .\\$lastName').html(selectedContact.lastName);
+		var request = {action:'saveContact', data:JSON.stringify(selectedContact)};
+		sendRequest('account', request, function(response) {
+			//log('saved', response.contact);
+			response.contact.profilePicture = profilePicture;
+			jQuery.extend(true, selectedContact, response.contact);
+			jKarma.display('#contactDetails',selectedContact); //must re-render the forms to update things like the ID
+			$('#profilePictureForm').show();
+		});
+	}
+	function deleteContact() {
+		if(confirm('Delete this contact?')) {
+			sendRequest('account', {action:'deleteContact', data:JSON.stringify(selectedContact)}, function(resonse) {
+				jKarma.removeFromArray(selectedContact, user.contacts);
+				selectedContact = null;
+				jKarma.display('#aContact', user.contacts);
+				$('#aContact > a').click(); //select first contact
+			});
+		}
+	}
+
+	function newContact() {
+		selectedContact = {firstName:'New', lastName:'', email:'', chatId:'', profilePicture:profilePicture};
+		user.contacts.push(selectedContact);
+		jKarma.display($('#aContact'), user.contacts);
+		$('#contacts').children().last().find('a').click();
+	}
+        
+        function changePreview() {
+            $('.preview').attr('src','images/contacts/'+$('#contactBookType').val()+".png");
+        }
+</script>
+
+<div style="">
+	<a href="index.html" style="display:inline-block;margin-right:20px;">Home</a>
+</div>
+
+<div class="sectionContainer borderRadius10" style="padding:20px;width: 760px;">
+	<h1 style="border-bottom:1px solid #ccc;">Account Informaion</h1>
+
+	<form id="accountInfo">
+		<Label for="firstName">First name</Label><input type="text" name="firstName" class="$firstName"><br>
+		<Label for="lastName">Last name</Label><input type="text" name="lastName" class="$lastName"><br>
+		<Label for="lastName">User name</Label><input type="text" name="username" class="$username"><br>
+		<Label for="password">Password</Label><input type="text" name="password" class="$password"><br>
+		<Label for="assistantPassword">Assistant's password</Label><input type="text" name="assistantPassword" class="$assistantPassword"><br>
+		<label for="userKey">User Key</label><input id="userKey" type="text" name="userKey" class="$userKey" size="90"><br><br>
+                <label for="contactBookType">Contact Book Type</label><select id="contactBookType" onchange="changePreview()" name="contactBookType" class="$contactBookType" ><option>0</option><option>1</option></select><br><br>
+
+                <table align="center">
+                <caption align="bottom"><i>Contact Book Preview</i></caption>
+                <tr><td><image class="preview" src="images/contacts/1.png" width="240" height="180"  style=""/> </td></tr>
+                </table>                
+                <br>                
+                
+                <label for="lang">Language</label><select name="lang" class="$lang" ><option>English</option><option>Danish</option><option>French</option><option>Spanish</option></select><br><br>
+                <label for="filter">Email Filter</label><select name="filter" class="$filter" ><option>None</option><option>Receive Only from Contacts</select><br><br>
+                <div class="formNote">
+			This is used in the direct-login URL. Make it a long alphanumeric string.
+			<table>
+			<tr>
+				<td>User's direct-login URL</td><td>
+				<span class="$directUserLogin" style="color:#555;"></span>
+				</td>
+			</tr><tr>
+				<td>Assistant login URL</td>
+				<td><span class="$directAssistantLogin" style="color:#555;"></span></td>
+			</tr>
+			</table>
+		</div>
+
+		<h2>Authentication</h2>
+		<div style="margin-left:140px;">
+			<input type="checkbox" name="passwordRequired" class="$passwordRequired">Password required<br>
+			<input type="checkbox" name="voiceAuthentication" class="$voiceAuthentication" disabled="disabled">Voice Recognition (future feature)<br>
+			<input type="checkbox" name="faceAuthentication" class="$faceAuthentication" disabled="disabled">Facial Recognition (future feature)<br>
+		</div>
+
+		<h2>Jabber/XMPP Chat</h2>
+		<Label for="chatId">Chat ID</Label><input type="text" name="chatId" class="$chatId" size="40"><br>
+		<Label for="chatPassword">Chat Password</Label><input type="text" name="chatPassword" class="$chatPassword">
+		<div class="formNote">This is to log into an XMPP (eg Jabber or Google chat) chat network</div>
+
+		<h2>Gmail and Picasa</h2>
+		<Label for="email">Gmail address</Label><input type="text" name="gmailAddress" class="$gmailAddress" size="40"><br>
+		<Label for="password">Gmail password</Label><input type="text" name="gmailPassword" class="$gmailPassword"><br>
+
+
+		<input type="submit" value="Save" onclick="return saveUserInfo();" style="margin-left: 140px;margin-top: 20px;">
+	</form>
+</div>
+
+<div class="sectionContainer borderRadius10" style="height:470px;">
+	<div class="listHeader">
+		<b>Contacts</b>
+		<a href="javascript:newContact();" class="smallButton" style="min-width:20px;">Add</a>
+	</div>
+	<div id="contacts" class="listColumn">
+		<div id="aContact">
+			<a class="$selectContact nameLink">
+				<span class="$firstName"></span>
+				<span class="$lastName"></span>
+			</a>
+		</div>
+	</div>
+
+	<div style="position:absolute; left:270px; right:20px; top:0px; bottom:0px">
+		<div id="contactDetails" style="margin-bottom:20px; ">
+			<h1 style="border-bottom: 1px solid #CCC; margin:10px 0px;">
+				<span class="$firstName"></span>
+				<span class="$lastName"></span>
+			</h1>
+			<form id="contactForm">
+				<Label for="firstName">First name</Label><input type="text" name="firstName" class="$firstName"><br>
+				<Label for="lastName">Last name</Label><input type="text" name="lastName" class="$lastName"><br>
+				<Label for="email">Email</Label><input type="text" name="email" class="$email" size="40"><br>
+				<Label for="chatId">Chat Id</Label><input type="text" name="chatId" class="$chatId" size="40"><br>
+				<input type="submit" value="Save" onclick="saveContact(); return false;" style="margin:20px 0px 0px 140px;">
+				<input type="submit" value="Delete" onclick="deleteContact(); return false;">
+			</form>
+
+			<form id="profilePictureForm" method="post" enctype="multipart/form-data" style="padding-left:20px; margin-top:30px;" action="file">
+				<table cellpadding="10">
+					<tr>
+					<Td>
+						<img id="profilePicture" class="$profilePicture"><br>
+					</Td>
+					<td>
+						Upload a profile picture:<Br>
+						<span style="color:#aaa;">
+						recommended size 100x100
+						</span>
+						<br>
+						<input type="hidden" name="id" class="$id">
+						<input type="hidden" name="action" value="uploadProfile">
+						<input type="file" name="file"><br>
+						<input type="submit" value="Upload">
+					</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div id="loading" class="borderRadius10 dropShadow" style="display:none;">
+	<img src="images/loading.gif">
+</div>
+
+<div id="messagePopup" class="dialog dropShadow borderRadius10" style="display:none;">
+	<div id="messagePopupText">Hello world!</div>
+	<a href="javascript:hide('#messagePopup')">Ok</a>
+</div>
+
+
+</body>
+</html>

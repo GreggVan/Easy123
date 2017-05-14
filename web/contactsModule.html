@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <script>
+        $(document).ready(function(){
+/*$('#hello').click(function(){
+        
+        $('#composeEmail').show();
+        $('#composeEmailFacade').show();
+
+        $('#inputpaper').val('');
+
+
+        $('#inputpaperFacade').val('');
+        $('#inputpaperFacade').focus();
+});
+*/
+        });
+
+
+
+
+
+
+
+        </script>
+
+<body>
+
+<!--
+<a id="contactsButton" class="button" href="javascript:clickModuleButton('contactsModule')" style="top:450px; left:0px; position:absolute; text-decoration:none;'">
+	<img src="images/contacts/contact.png" style="margin:15px 0px 0px 15px;">
+</a>
+ -->
+
+<div id="addressBook" style="display:none;z-index: 30">
+    <div id="page">
+
+        
+        <div>
+        <div id="Header" style="font-size: 25px;text-align: left;margin-top:25px;margin-left: 40px;margin-bottom: 0px;">Touch the person you want to write <br>or talk to.</div>
+                <div id="EmailInstructions" style="font-size: 25px;text-align: center;margin-top:50px;margin-left: 50px;margin-right: 50px;margin-bottom: 0px;">Find name in directory <br>and click MAIL button there
+                    <br><br>
+                    <button onclick="javascript:openAddressBook();"> Open Address Book</button><br><br>
+                    or<br><br>
+                    Fill in Name and Email Address here<br><br>
+                    <div style="padding-bottom:0px;">Name : <input type ="text" id="name" style="font-size:22px;widht:100px;height:30px;"/></div><br>
+                    Email : <input type ="text" id="email" style="font-size:22px;widht:100px;height:30px;"/><br><br>
+                    <button onclick="javascript:writeEmailToUnknown();">Write Email</button>
+                </div>
+
+	<div id="noContacts" style="font-size: 25px;text-align: center;margin: 100px 40px;"></div>
+	<div id="contacts">
+            <table id="contactTable" width="100%">
+
+            </table>
+               		<div id="aContact" class="aContact" style="display: none">
+   			<a class="$selectContact aContact" style="color:black;display:block;">
+        		<img class="$profilePicture contact_pic">
+                        <span class="$name" id="contactName"></span>
+   			</a>
+                        </div>
+        <button id="moreButton" onclick="more()" style="top:585px;left:400px;display:none;position: absolute">More</button> 
+        <button id="backButton" style="top:585px;position: absolute;display:none" onclick="back()">Back</button> 
+           
+	</div>
+        </div>
+	<div id="person" style="display: none;">
+            <div style='width:100px;overflow:hidden;background-color: #000000' class='contact_pic' align="center"><img class="$profilePicture" style="height:100px;"></div>
+		<div class="$name" align="left" style="padding-left: 0px; position: absolute; left: 188px; top: 80px; font-size: 30px"></div>
+		<div id="options" style="margin-top:30px;">
+                    <div id="hello"><div class="contactAction $writeEmail">
+				<img class="contactActionIcon" src="images/contacts/mail2.png">
+                                <span id ="writeMailTo">Write a MAIL to </span><span class="$firstName"></span>
+			</div></div>
+			<div class="contactAction $callContact" >
+				<img class="contactActionIcon" src="images/contacts/phone1.png">
+                                <span id="callContact">Call </span><span class="$firstName"></span>
+			</div>
+			<div class="contactAction" href="#">
+				<img class="contactActionIcon" src="images/contacts/stack3.png" width="70" height="70">
+                                <span id="viewPhotos1">View </span><span class="$firstName"></span><span id="viewPhotos2">'s photos</span>
+			</div>
+			<div class="contactAction $startChat" >
+				<img class="contactActionIcon" src="images/contacts/chatBlue.png">
+                                <span id="chatWith">Chat with </span><span class="$firstName"></span>
+			</div>
+		</div>
+        
+	</div>
+        	<div id="personNotAvailable" style="display: none;">
+            <div style='width:100px;overflow:hidden;background-color: #000000' class='contact_pic' align="center"><img class="$profilePicture" style="height:100px;"></div>
+		<div class="$name" align="left" style="padding-left: 0px; position: absolute; left: 188px; top: 80px; font-size: 30px"></div>
+		<div id="options" style="margin-top:30px;">
+                    <div id="hello"><div class="contactAction $writeEmail">
+				<img class="contactActionIcon" src="images/contacts/mail2.png">
+                                <span id ="writeMailTo">Write a MAIL to </span><span class="$firstName"></span>
+			</div></div>
+			<div class="contactAction $callContact" >
+				<img class="contactActionIcon" src="images/contacts/phone1.png">
+                                <span id="callContact">Call </span><span class="$firstName"></span>
+			</div>
+			<div class="contactAction" href="#">
+				<img class="contactActionIcon" src="images/contacts/stack3.png" width="70" height="70">
+                                <span id="viewPhotos1">View </span><span class="$firstName"></span><span id="viewPhotos2">'s photos</span>
+			</div>
+			<div class="contactAction" id="chat">
+				<img class="contactActionIcon" src="images/contacts/chatBlue.png">
+                                <span id="presence"><span class="$firstName"></span> not available</span>
+			</div>
+		</div>
+        
+	</div>
+        <button id="backToListing" style="top:593px;left:20px;position: absolute;display:none" onclick="selectContacts()">Back</button>         
+</div>
+
+	<img class="spiral" src="images/contacts/spiral1.png" style="top:60px;"/>
+	<img class="spiral" src="images/contacts/spiral1.png" style="top:140px;"/>
+	<img class="spiral" src="images/contacts/spiral1.png" style="top:220px;"/>
+	<img class="spiral" src="images/contacts/spiral1.png" style="top:300px;"/>
+	<img class="spiral" src="images/contacts/spiral1.png" style="top:380px;"/>
+	<img class="spiral" src="images/contacts/spiral1.png" style="top:460px;"/>
+	<img class="spiral" src="images/contacts/spiral1.png" style="top:540px;"/>
+      	<img class="spiral" id="contactArrow" src="images/notes/arrow.png" style="top:30px;left:627px;"/>
+        <div class="spiral" id="contactInstruction" style="top:30px;left:680px;width:170px;font-size: 22px;font-style: bold">
+            First Letter of First Name
+
+        </div>
+	<div id="flaps" style="position:absolute; right:-75px; top:20px;">
+		<div class="flap" style="top:50px" onclick="javascript:shortListContacts(['A','B'], this);">A <span style="font-size:18px">or</span> B</div>
+		<div class="flap" style="top:97px" onclick="javascript:shortListContacts(['C','D'], this);">C <span style="font-size:18px">or</span> D</div>
+		<div class="flap" style="top:144px" onclick="javascript:shortListContacts(['E','F'], this);">E <span style="font-size:18px">or</span> F</div>
+		<div class="flap" style="top:191px" onclick="javascript:shortListContacts(['G','H'], this);">G <span style="font-size:18px">or</span> H</div>
+		<div class="flap" style="top:238px" onclick="javascript:shortListContacts(['I','J'], this);">I <span style="font-size:18px">or</span> J</div>
+		<div class="flap" style="top:285px" onclick="javascript:shortListContacts(['K','L'], this);">K <span style="font-size:18px">or</span> L</div>
+		<div class="flap" style="top:332px" onclick="javascript:shortListContacts(['M','N'], this);">M <span style="font-size:18px">or</span> N</div>
+		<div class="flap" style="top:379px" onclick="javascript:shortListContacts(['O','P'], this);">O <span style="font-size:18px">or</span> P</div>
+		<div class="flap" style="top:426px" onclick="javascript:shortListContacts(['Q','R'], this);">Q <span style="font-size:18px">or</span> R</div>
+		<div class="flap" style="top:473px" onclick="javascript:shortListContacts(['S','T'], this);">S <span style="font-size:18px">or</span> T</div>
+		<div class="flap" style="top:520px" onclick="javascript:shortListContacts(['U','V'], this);">U <span style="font-size:18px">or</span> V</div>
+                <div class="flap" style="top:567px" onclick="javascript:shortListContacts(['W','X'], this);">W <span style="font-size:18px">or</span> X</div>
+		<div class="flap" style="top:614px" onclick="javascript:shortListContacts(['Y','Z'], this);">Y <span style="font-size:18px">or</span> Z</div>
+	</div>
+</div>
+
+</body>
+</html>
