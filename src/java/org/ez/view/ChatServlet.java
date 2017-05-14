@@ -28,7 +28,7 @@ public class ChatServlet extends JsonServlet {
     @Override
     protected void doActionNamed(HttpServletRequest request, String action, String data, HashMap<String, Object> output) {
         try {
-            System.out.println(action);
+           /* System.out.println(action);
             Object chatObj = request.getSession().getAttribute(CHAT_CONTROLLER);
             User user = getUser(request);
             Account account = user.getAccount(AccountType.Gmail);
@@ -60,9 +60,9 @@ public class ChatServlet extends JsonServlet {
                 }else if("close".equals(action)){
                     CloseChat(request.getSession());
                 }
-           
+           */
         }catch(Exception e) {
-            log.error("error processing action {}", action, e);
+            //log.error("error processing action {}", action, e);
             error(output, "An error occurred processing the action " + action, e);
         } 
     }

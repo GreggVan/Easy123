@@ -33,7 +33,7 @@ public class AlbumServlet extends JsonServlet {
 					return;
 				}
 				else {
-					albumController = new AlbumController(acc);
+					albumController = new AlbumController();
 					request.getSession().setAttribute(ALBUM_CONTROLLER, albumController);
 				}
 			}

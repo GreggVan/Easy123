@@ -45,4 +45,9 @@ public class Album {
 		}
 		return b.toString();
 	}
+        public void setThumbnail() {
+            if( ! photos.isEmpty() )
+                this.thumbnailURL = photos.get(0).getUrl();
+        }
+        
 }
