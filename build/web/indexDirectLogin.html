@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<!-- what i have -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<!-- taken from cjfe -->
+<!--	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />-->
+
+	<title>Easyone</title>
+        
+	<script type="text/javascript" src="javascripts/jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="javascripts/jquery-ui-1.8.13.custom.min.js"></script>
+	<script type="text/javascript" src="javascripts/json2.js"></script>
+	<script type="text/javascript" src="javascripts/jkarma.js"></script>
+	<script type="text/javascript" src="javascripts/utils.js"></script>
+
+	<script type="text/javascript" src="javascripts/jquery-css-transform.js"></script>
+	<script type="text/javascript" src="javascripts/rotate3Di.js"></script>
+	<script type="text/javascript" src="javascripts/emailHelperFunctions.js"></script>
+
+
+	<script type="text/javascript" src="javascripts/voice.js"></script>
+       	<script type="text/javascript" src="javascripts/swfobject.js"></script>
+
+	<script type="text/javascript" src="javascripts/main.js"></script>
+	<script type="text/javascript" src="javascripts/emailModule.js"></script>
+
+	<script type="text/javascript" src="javascripts/albumModule.js"></script>
+	<script type="text/javascript" src="javascripts/chatModule.js"></script>
+	<script type="text/javascript" src="javascripts/videoChatModule.js"></script>
+
+      	<script type="text/javascript" src="javascripts/rtt/strophe.js"></script>
+	<script type="text/javascript" src="javascripts/rtt/strophe.rtt.js"></script>
+	<script type="text/javascript" src="javascripts/rtt/rtt.js"></script>
+	<script type="text/javascript" src="javascripts/rtt/StropheFunctions.js"></script>
+
+
+	<script type="text/javascript" src="javascripts/gallery.js"></script>
+	<LINK rel="stylesheet" type="text/css" href="resources/gallery_contacts.css">
+
+	<LINK rel="stylesheet" type="text/css" href="resources/style.css">
+	<LINK rel="stylesheet" type="text/css" href="resources/newcss.css">
+	<LINK rel="stylesheet" type="text/css" href="resources/contacts.css">
+
+</head>
+
+<body onload="initAppDirectly()">
+
+<div style="display:none; position:absolute; width:1024px; height:690px; top:0px; left:0px; border:1px solid red;"><!-- usable iPad screen --></div>
+
+<div id="login" class="borderRadius10" style="display:none;">
+	<form id="loginForm" action="" style="margin:10px;">
+		<div id="userKeyField">
+			Type in your<br>
+			<label for="userKey">Username</label>
+			<input id="userKey" type="text" name="userKey" size="30">
+		</div>
+		<div id="passwordField" style="display:none;">
+			Signing in as <span class="username" style="font-style:italic;"></span> (<a onclick="gotoLoginScreen()">change user</a>)
+			<br><br>
+			<label for="password">Password</label>
+			<input id="password" type="password" size="30">
+		</div>
+		<input type="submit" value="Submit" onclick="login(); return false;" style="display:block; margin:10px 0px 0px 170px;">
+		<div style="text-align:center;margin-top:40px; ">
+			or <A href="javascript:showSignUp()">sign up</A> for a new account.
+		</div>
+	</form>
+
+	<form id="signUpForm" style="display:none">
+		Sign up for a new account<br><br>
+		<label for="signUpKey">Sign up key</label><input id="signUpKey" name="signUpKey" type="text">
+		<input type="submit" value="Submit" onclick="signup(); return false;" style="display:inline-block; margin:10px 0px 0px 170px;">
+		<a href="javascript:hideSignUp()">Cancel</a>
+
+	</form>
+</div>
+<img id="contactTrash" src="images/mail/trash.png" style="position:absolute; bottom:10px; right:10px;z-index:1000;display:none">
+<div id="contents" style="display:none;">
+	<div id="sidebar">
+		<div id="mail" class="button" onmousedown="javascript:clickModuleButton('emailModule')" style="z-index:1;" style="color:white;text-decoration:none">
+			<img id="mailbox" src="images/mail/mailbox_c.png" />
+			<img style="position:absolute; top:25px; right:-15px;"src="images/mail/call1.png" id="calloutImage"/>
+
+			<div style="position:absolute; top:63px; right:-11px; width:100px; text-align:center;">
+				<h1 id="new_emails" style="color:white; border:none; margin:0px; font-size:24px; font-weight:bold">
+					Checking
+				</h1>
+			</div>
+                        <div id="emailHeader" style="color:white;text-decoration: none;"><strong>Mail</strong></div>
+
+
+		</div>
+            <div id="mail_notes">
+                <img style="position:absolute; top:100px; right:-160px;" src="images/notes/arrow1.png">
+                <div style="position:absolute; top:113px; right:-465px;align:left;font-size: 28px;font: #000000">Press mailbox for Mail      </div>
+            </div>
+		<div id="albumButton" class="button" onmousedown="javascript:clickModuleButton('albumModule')" style="color:white;text-decoration:none;width:180;height:180">
+			<img src="images/album/album2.png" style="margin: 20px 5px;">
+			<div id="albumLoading" style="color:white;text-decoration: none;font-size:20px; "><strong>Loading Photos...</strong></div>
+		</div>
+		<div id="contactsButton" class="button" onmousedown="javascript:clickModuleButton('contactsModule')" style="color:white;text-decoration:none">
+			<img src="images/contacts/contact.png" style="margin:10px 0px 0px 15px;">
+     			<div id="contactHeader"><strong>Call / Write / Chat</strong></div>
+		</div>
+
+	</div>
+	<div id="emailModule" style="z-index:1;"></div>
+	<div id="albumModule"></div>
+	<div id="contactsModule"></div>
+	<div id="chatModule"></div>
+        <div style="dislay:none;left: 300px;position: absolute;z-index:1" id="videoChatModule"></div>
+        
+</div>
+
+
+<div id="menu" style="display:none;">
+	<a id="menuLink" style="" href="javascript:toggleMenu()">Menu</a>
+	<div id="menuBody" style="display:none;">
+		<a href="accountSettings.html">Account Settings</a>
+		<a href="javascript:logout()" style="border-top:1px solid #eee; margin-top:5px;">Logout</a>
+	</div>
+</div>
+
+<div id="loading" class="borderRadius10 dropShadow" style="display:none;">
+	<img src="images/loading.gif">
+</div>
+
+<div id="messagePopup" class="dialog dropShadow borderRadius10" style="display:none;">
+	<div id="messagePopupText">Hello world!</div>
+	<a href="javascript:hide('#messagePopup')">Ok</a>
+</div>
+
+</body>
+</html>

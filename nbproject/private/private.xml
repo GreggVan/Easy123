@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1">
+        <file>
+            <url>src/java/org/ez/controllers/EmailController.java</url>
+            <line>219</line>
+        </file>
+    </editor-bookmarks>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0">
+        <file>
+            <url>src/java/org/ez/controllers/EmailController.java</url>
+            <bookmark id="0">
+                <name/>
+                <line>219</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
+        <file>file:/Users/purushothamanramraj/NetBeansProjects/eza/web/javascripts/emailClickHandlers.js</file>
+        <file>file:/Users/purushothamanramraj/NetBeansProjects/eza/web/javascripts/emailHelperFunctions.js</file>
+        <file>file:/Users/purushothamanramraj/NetBeansProjects/eza/web/accountSettings.html</file>
+        <file>file:/Users/purushothamanramraj/NetBeansProjects/eza/src/java/org/ez/model/Account.java</file>
+        <file>file:/Users/purushothamanramraj/NetBeansProjects/eza/src/java/org/ez/model/BinaryData.java</file>
+        <file>file:/Users/purushothamanramraj/NetBeansProjects/eza/src/java/org/ez/model/Lang.java</file>
+        <file>file:/Users/purushothamanramraj/NetBeansProjects/eza/src/java/org/ez/model/Person.java</file>
+        <file>file:/Users/purushothamanramraj/NetBeansProjects/eza/src/java/org/ez/model/User.java</file>
+        <file>file:/Users/purushothamanramraj/NetBeansProjects/eza/web/albumModule.html</file>
+        <file>file:/Users/purushothamanramraj/NetBeansProjects/eza/web/javascripts/gallery.js</file>
+        <file>file:/Users/purushothamanramraj/NetBeansProjects/eza/web/javascripts/emailModule.js</file>
+        <file>file:/Users/purushothamanramraj/NetBeansProjects/eza/web/index.html</file>
+        <file>file:/Users/purushothamanramraj/NetBeansProjects/eza/web/javascripts/main.js</file>
+        <file>file:/Users/purushothamanramraj/NetBeansProjects/eza/web/javascripts/contactsModule.js</file>
+        <file>file:/Users/purushothamanramraj/NetBeansProjects/eza/web/javascripts/albumModule.js</file>
+        <file>file:/Users/purushothamanramraj/NetBeansProjects/eza/web/mem.jsp</file>
+        <file>file:/Users/purushothamanramraj/NetBeansProjects/eza/web/indexDirectLogin.html</file>
+        <file>file:/Users/purushothamanramraj/NetBeansProjects/eza/web/emailModule.html</file>
+        <file>file:/Users/purushothamanramraj/NetBeansProjects/eza/src/java/org/ez/view/EmailServlet.java</file>
+    </open-files>
+</project-private>
