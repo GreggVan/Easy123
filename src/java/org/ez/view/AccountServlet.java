@@ -90,10 +90,25 @@ public class AccountServlet extends JsonServlet {
                 user.setContactBookType(Integer.parseInt(req.getParameter("contactBookType")));
                 user.setLang(req.getParameter("lang"));
                 user.setFilter(req.getParameter("filter"));
+                user.setScreensaverwaitTime(req.getParameter("screensaverwaittime"));
 		System.out.println("#####%%%%%"+req.getParameter("filter"));
 		String s = req.getParameter("passwordRequired");
 		user.setPasswordRequired((s!=null && s.toLowerCase().equals("true")));
 		
+                user.setPasswordRequired((s!=null && s.toLowerCase().equals("true")));
+                
+                String ef=req.getParameter("emailfunction");
+                user.setEmailFunction((ef!=null && ef.toLowerCase().equals("true")));
+                
+                
+                String af=req.getParameter("albumfunction");
+                user.setAlbumFunction((af!=null && af.toLowerCase().equals("true")));
+                
+                
+                String cf=req.getParameter("contactsfunction");
+                user.setContactsFunction((cf!=null && cf.toLowerCase().equals("true")));
+                
+                user.setScreenSaverType(Integer.parseInt(req.getParameter("screensaverType")));
 		//check userkey uniqueness
 		String value;
 		if((value=req.getParameter("userKey"))!=null && value.equals(user.getUserKey())==false) {

@@ -9,8 +9,13 @@ if(!window.userData) {
 		name : '',			//the user's name
 		contacts : null,		//the contact list, initialized by the contactsModule
                 contactBookType : 0,
-                emailFilter : "None"
-	},
+                emailFilter : "None",
+	        emailFuction: 0,
+                albumFunction: 0,
+                contactsFuction:0,
+                screensaverType: 0
+    
+    },
         window.animationLock=false,      //ignore input events while in animation.
         window.languageData =null,
         window.heartBeatKey=117,
@@ -155,6 +160,7 @@ function login() {
 function processLoginResponse(response) {
                  var array=new Array();
                  array=response.lang;
+                 //console.log(response.lang);
                  window.language=response.language;
                  window.languageData=array;
                  
@@ -173,17 +179,24 @@ function processLoginResponse(response) {
 		document.forms.loginForm.password.focus();
 	}
 	else if(response.ok){
+          
                 if(response.assistant) {
 			$('#menu').show();
 		}
 		log('already logged in with', response.name);
-		userData.name = response.name; 
+		userData.name = response.name;
                 if(userData.name=="Elaine Trace") //Demo account for Elaine alone :)
                     window.DEMO=true;
 //		$('#logout').attr("href", response.logoutURL);
                 userData.contactBookType=response.contactBookType;
                 userData.emailFilter=response.emailFilter;
-                
+                userData.emailFuction=response.emailFunction;
+                userData.albumFunction=response.albumFunction;
+                userData.contactsFuction=response.contactsFuction;
+                userData.screensaverType=response.screensaverType;
+                window.screenSaverWaitTime=response.screensaverwaittime;
+                userData.screensaverType=response.screensaverType;
+                window.log(userData.screensaverType);
 		$('#login').hide();
                 $.getScript("javascripts/contactsModule_"+userData.contactBookType+".js", function() {
                     loadModules();
@@ -264,7 +277,15 @@ function loadModules() {
         $('img').draggable({start:function(e){
                 e.preventDefault();
         }});
-
+   if (userData.emailFuction!=true){
+        $('#mail').hide();}
+    if (userData.albumFunction!=true){
+        $('#albumButton').hide();
+    }
+    if (userData.contactsFuction!=true){
+        $('#contactsButton').hide();
+    }
+    
 	$('#emailModule').load("emailModule.html", function() {
 		initEmailModule();
 	});

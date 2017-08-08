@@ -54,8 +54,14 @@ public class User {
 	/** an optional authentication method*/
 	private boolean passwordRequired;
         private int contactBookType; 
+        private int screensaverType;
         private String lang;
         private String filter;  //Email Filter
+        
+        private boolean emailFunction;
+        private boolean albumFunction;
+        private boolean contactsFunction;
+        private String screensaverwaitTime;
 	
 	public boolean removeFromContacts(Person aContact) {
 		Person p = getContact(aContact.getId());
@@ -220,6 +226,43 @@ public class User {
 	public void setPasswordRequired(boolean passwordRequired) {
 		this.passwordRequired = passwordRequired;
 	}
+        public boolean getEmailFunction() {
+		return emailFunction;
+	}
 
+	public void setEmailFunction(boolean emailFunction) {
+		this.emailFunction = emailFunction;
+	}
+
+        public boolean getAlbumFunction() {
+		return albumFunction;
+	}
+
+	public void setAlbumFunction(boolean albumFunction) {
+		this.albumFunction = albumFunction;
+	}
+        
+         public boolean getContactsFunction() {
+		return contactsFunction;
+	}
+
+	public void setContactsFunction(boolean contactsFunction) {
+		this.contactsFunction = contactsFunction;
+	}
+        
+        public String getScreensaverwaitTime() {
+		return screensaverwaitTime;
+	}
+
+	public void setScreensaverwaitTime(String screensaverwaitTime) {
+		this.screensaverwaitTime = screensaverwaitTime;
+	}
+    public int getScreenSaverType() {
+		return screensaverType;
+	}
+
+	public void setScreenSaverType(int screensaverType) {
+		this.screensaverType = screensaverType;
+	}
 
 }

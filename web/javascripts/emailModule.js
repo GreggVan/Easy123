@@ -52,7 +52,7 @@ function getEmail() {
         
         if(window.DEMO)  
             emailAction="getDemoEmail";
-        
+        //console.log(emailAction);
             sendRequest('email', {action:emailAction}, function(response) {
                     //Start prefetching images for emailContents
                     prefetch("images/mail/paper.png");
@@ -60,11 +60,12 @@ function getEmail() {
                     prefetch("images/mail/inputpaper.png");
                     userData.name = response.name;
                     
-                    
+                    //var emails=response.emails;
                     var emails=filterEmails(response.emails);
                     
-
+                    console.log(emails.length);
                     initEmails(emails);
+                     
                     if(emails=="")
                         emailModule.noEmail=true;
                     else
@@ -124,6 +125,7 @@ function initEmails(emails) {
 		if(emails[i].status=='unread') {
 			newEmails++;
 		}
+                console.log(newEmails);
 		emailNode.attr('r', emails[i].status);
 		emailNode.attr('t', emails[i].folder);
 		emailNode.attr('emailIndex', i);
@@ -304,6 +306,7 @@ function checkForNewEmails() {
 	if(emailModule.shouldCheckForNewEmails) {
 		log('checking for new emails');
 		emailModule.newEmailsRequest = sendRequest('email', {action:'checkForNewEmails'}, function(response) {
+                        console.log(emailModule.numNewEmails);
 			if(response.newEmails>emailModule.numNewEmails) {
 				//we have new emails so prefetch them
                                 var prevCount=emailModule.numNewEmails;
@@ -312,6 +315,7 @@ function checkForNewEmails() {
                                 var diff=response.newEmails-prevCount;
 				sendRequest('email', {action:'getNewEmails',limit:diff}, function(response) {
 					log('prefetching emails');
+                           
                                         var emails=filterEmails(response.emails);
                                         emails=filterPhantomEmails(emails);
                                         if(emails.length>0) {
@@ -549,6 +553,7 @@ function showMailCallout(animate){
         
 }
 function updateMailCallout(prevCount,num) {
+    //console.log(window.languageData);
         $('#new_emails').html(""+num + " "+window.languageData['new_emails'].split('|')[1]);
         $('#new_emails').addClass('noLine');
         if(num==0) //Hide the callout if the # of new emails is 0

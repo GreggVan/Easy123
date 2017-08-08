@@ -10,6 +10,8 @@ function showScreensaver(){
     $('#screenSaverGallery').hide();
     $('#newMailText').hide();
     log("SCREEN SAVER");
+   if(userData.screensaverType==0)
+    {
     if(emailModule.numNewEmails!=undefined) 
         if(emailModule.numNewEmails>0) {
             
@@ -31,6 +33,16 @@ function showScreensaver(){
         //window.photoRefresher=setTimeout("showScreenSaverGallery()",2000);
         });
     }
+    }
+    else
+    {
+        if(emailModule.numNewEmails!=undefined) 
+        if(emailModule.numNewEmails>0) {
+            
+            moveRandom();
+            return;
+        }
+    }
 
 }
  function clearScreensaver(e) {
@@ -40,7 +52,8 @@ function showScreensaver(){
     clearTimeout(window.screenTimer);
     clearTimeout(window.checkIfNewMailTimer);
     //schedule screenSaver after the wait time
-    window.screenTimer = setTimeout("showScreensaver()",window.screenSaverWaitTime);
+    if (window.screenSaverWaitTime!='NULL'){
+    window.screenTimer = setTimeout("showScreensaver()",window.screenSaverWaitTime);}
 }
 /********************************************/
 /**

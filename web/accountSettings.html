@@ -9,7 +9,7 @@
 	<script type="text/javascript" src="javascripts/utils.js"></script>
 	<script type="text/javascript" src="javascripts/main.js"></script>
 
-	<LINK rel="stylesheet" type="text/css" href="resources/style.css">
+	
 </head>
 <body>
 
@@ -122,7 +122,7 @@
 	}
 
 	function showUser(user) {
-		//TODO could make accounts dynamic when more can be created, but for not just hard-code it for gmail
+		//TODO could make accounts dynamic when more can be created, but for now just hard-code it for gmail
 		if(user.accounts.length>0) {
 			user.gmailAddress = user.accounts[0].email;
 			user.gmailPassword = user.accounts[0].password;
@@ -176,9 +176,12 @@
 			$('#profilePictureForm').hide();
 		}
 	}
+        
 
 	function saveContact() {
 		jKarma.encodeForm('#contactForm', selectedContact);
+                console.log(selectedContact);
+      
 		$('#contacts').find('.selected  .\\$firstName').html(selectedContact.firstName);
 		$('#contacts').find('.selected  .\\$lastName').html(selectedContact.lastName);
 		var request = {action:'saveContact', data:JSON.stringify(selectedContact)};
@@ -189,6 +192,7 @@
 			jKarma.display('#contactDetails',selectedContact); //must re-render the forms to update things like the ID
 			$('#profilePictureForm').show();
 		});
+                return false;
 	}
 	function deleteContact() {
 		if(confirm('Delete this contact?')) {
@@ -217,9 +221,10 @@
 	<a href="index.html" style="display:inline-block;margin-right:20px;">Home</a>
 </div>
 
-<div class="sectionContainer borderRadius10" style="padding:20px;width: 760px;">
-	<h1 style="border-bottom:1px solid #ccc;">Account Informaion</h1>
 
+<fieldset>
+
+      <legend style="font-size: 28px;"> General Settings </legend>
 	<form id="accountInfo">
 		<Label for="firstName">First name</Label><input type="text" name="firstName" class="$firstName"><br>
 		<Label for="lastName">Last name</Label><input type="text" name="lastName" class="$lastName"><br>
@@ -227,16 +232,6 @@
 		<Label for="password">Password</Label><input type="text" name="password" class="$password"><br>
 		<Label for="assistantPassword">Assistant's password</Label><input type="text" name="assistantPassword" class="$assistantPassword"><br>
 		<label for="userKey">User Key</label><input id="userKey" type="text" name="userKey" class="$userKey" size="90"><br><br>
-                <label for="contactBookType">Contact Book Type</label><select id="contactBookType" onchange="changePreview()" name="contactBookType" class="$contactBookType" ><option>0</option><option>1</option></select><br><br>
-
-                <table align="center">
-                <caption align="bottom"><i>Contact Book Preview</i></caption>
-                <tr><td><image class="preview" src="images/contacts/1.png" width="240" height="180"  style=""/> </td></tr>
-                </table>                
-                <br>                
-                
-                <label for="lang">Language</label><select name="lang" class="$lang" ><option>English</option><option>Danish</option><option>French</option><option>Spanish</option></select><br><br>
-                <label for="filter">Email Filter</label><select name="filter" class="$filter" ><option>None</option><option>Receive Only from Contacts</select><br><br>
                 <div class="formNote">
 			This is used in the direct-login URL. Make it a long alphanumeric string.
 			<table>
@@ -250,28 +245,55 @@
 			</tr>
 			</table>
 		</div>
+                <label for="contactBookType">Contact Book Type</label><select id="contactBookType" onchange="changePreview()" name="contactBookType" class="$contactBookType" ><option>0</option><option>1</option></select><br><br>
 
-		<h2>Authentication</h2>
+                <table align="center">
+                <caption align="bottom"><i>Contact Book Preview</i></caption>
+                <tr><td><image class="preview" src="images/contacts/1.png" width="240" height="180"  style=""/> </td></tr>
+                </table>                
+                <br>                
+                
+                <label for="lang">Language</label><select name="lang" class="$lang"><option selected>English</option><option>Danish</option><option>French</option><option>Spanish</option></select><br><br>
+                <label for="screensaverType">Screen Saver Type</label><select id="screensaverType" name="screensaverType" class="$screensaverType" ><option value=0 selected>Picture and Email Notification</option><option value=1> Email Notification Only</option></select>
+               <label for="waittime">Screen Saver Start After</label><select name="screensaverwaittime" class="screensaverwaittime"><option value="60000" selected >1 Minute</option><option value="180000" >3 Minutes</option><option value="300000" >5 Minutes</option><option value="600000" >10 Minutes</option><option value="1200000" >20 Minutes</option><option value="1800000" >30 Minutes</option><option value="3600000" >60 Minutes</option><option value="NULL">never</option></select>
+               <h2 style="border-bottom:1px solid #ccc;">Function</h2>
+               
+              
+               
+		<div style="margin-left:140px;">
+			<input type="checkbox" name="emailfunction" class="$emailfunction">Email Function<br>
+			<input type="checkbox" name="albumfunction" class="$albumfunction" >Album Function<br>
+			<input type="checkbox" name="contactsfunction" class="$contactsfunction">Contacts Function<br>
+		</div>
+                <h2 style="border-bottom:1px solid #ccc;">Authentication</h2>
 		<div style="margin-left:140px;">
 			<input type="checkbox" name="passwordRequired" class="$passwordRequired">Password required<br>
 			<input type="checkbox" name="voiceAuthentication" class="$voiceAuthentication" disabled="disabled">Voice Recognition (future feature)<br>
 			<input type="checkbox" name="faceAuthentication" class="$faceAuthentication" disabled="disabled">Facial Recognition (future feature)<br>
 		</div>
+      </fieldset>      
 
-		<h2>Jabber/XMPP Chat</h2>
+		  <br>                
+                <fieldset>
+                    <legend style="font-size: 28px;">Jabber/XMPP Chat</legend>
 		<Label for="chatId">Chat ID</Label><input type="text" name="chatId" class="$chatId" size="40"><br>
 		<Label for="chatPassword">Chat Password</Label><input type="text" name="chatPassword" class="$chatPassword">
 		<div class="formNote">This is to log into an XMPP (eg Jabber or Google chat) chat network</div>
-
+                </fieldset>
+                   <br>                
+                <fieldset>
+                    <legend style="font-size: 28px;">Email Settings</legend>
 		<h2>Gmail and Picasa</h2>
+                 <label for="filter">Email Filter</label><select name="filter" class="$filter" ><option selected>None</option><option>Receive Only from Contacts</select><br><br>
 		<Label for="email">Gmail address</Label><input type="text" name="gmailAddress" class="$gmailAddress" size="40"><br>
-		<Label for="password">Gmail password</Label><input type="text" name="gmailPassword" class="$gmailPassword"><br>
-
-
+		<Label for="password">Gmail password</Label><input type="password" name="gmailPassword" class="$gmailPassword"><br>
+                </fieldset>
 		<input type="submit" value="Save" onclick="return saveUserInfo();" style="margin-left: 140px;margin-top: 20px;">
 	</form>
-</div>
 
+  <br>                
+                <fieldset>
+                    <legend style="font-size: 28px;">Contacts Settings</legend>
 <div class="sectionContainer borderRadius10" style="height:470px;">
 	<div class="listHeader">
 		<b>Contacts</b>
@@ -297,7 +319,7 @@
 				<Label for="lastName">Last name</Label><input type="text" name="lastName" class="$lastName"><br>
 				<Label for="email">Email</Label><input type="text" name="email" class="$email" size="40"><br>
 				<Label for="chatId">Chat Id</Label><input type="text" name="chatId" class="$chatId" size="40"><br>
-				<input type="submit" value="Save" onclick="saveContact(); return false;" style="margin:20px 0px 0px 140px;">
+				<input type="submit" value="Save" onclick="return saveContact();" style="margin:20px 0px 0px 140px;">
 				<input type="submit" value="Delete" onclick="deleteContact(); return false;">
 			</form>
 
@@ -324,6 +346,7 @@
 		</div>
 	</div>
 </div>
+                </fieldset>
 
 <div id="loading" class="borderRadius10 dropShadow" style="display:none;">
 	<img src="images/loading.gif">

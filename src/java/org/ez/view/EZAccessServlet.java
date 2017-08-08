@@ -44,7 +44,8 @@ public class EZAccessServlet extends JsonServlet {
 	 * This method checks for the direct login (using /user or /assistant). 
 	 * If not logged in, the userKey is saved in session, and a login attempt is made. The result is not 
 	 * important right now, because index.html will call the json init action, where all
-	 * credentials are actually processed. Essentially, all this does is note the userKey and if that's
+	 * credentials are actually processLoginResponse
+         * ed. Essentially, all this does is note the userKey and if that's
 	 * enough to log the user in then they are logged in.
 	 * In all cases they are redirected to index.html.  
 	 */
@@ -240,12 +241,17 @@ public class EZAccessServlet extends JsonServlet {
                 output.put("contactBookType",user.getContactBookType());
                 output.put("language",user.getLang());
                 output.put("emailFilter",user.getFilter());
+                output.put("emailFunction", user.getEmailFunction());
+                output.put("albumFunction", user.getAlbumFunction());
+                output.put("contactsFuction", user.getContactsFunction());
+                output.put("screensaverwaittime", user.getScreensaverwaitTime());
+                output.put("screensaverType", user.getScreenSaverType());
                 //Retrieve language Translations
                     Session session = HibernateUtil.getSession();
                     try {
                         session.beginTransaction();
                         List<Lang> lang=null;
-                        lang =session.createSQLQuery("select htmlId, "+user.getLang()+" from Lang").list();
+                       lang =session.createSQLQuery("select htmlId, "+user.getLang()+" from Lang").list();
                         output.put("lang",lang);
                         session.getTransaction().commit();
                     }
