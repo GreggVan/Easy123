@@ -199,6 +199,7 @@ function isavailable(contact){
     else
     {
         jKarma.display($('#personNotAvailable').show(), contact);
+        $("#videoscreen").hide();
     }
 }
 

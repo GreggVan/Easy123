@@ -18,16 +18,16 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/apple/Desktop/ez/web/javascripts/main.js</file>
-            <file>file:/Users/apple/Desktop/ez/src/java/org/ez/view/AccountServlet.java</file>
-            <file>file:/Users/apple/Desktop/ez/src/java/org/ez/view/EZAccessServlet.java</file>
-            <file>file:/Users/apple/Desktop/ez/web/javascripts/screensaver.js</file>
-            <file>file:/Users/apple/Desktop/ez/src/java/org/ez/model/User.java</file>
-            <file>file:/Users/apple/Desktop/ez/src/java/org/ez/view/JsonServlet.java</file>
-            <file>file:/Users/apple/Desktop/ez/web/accountSettings.html</file>
-            <file>file:/Users/apple/Desktop/ez/web/javascripts/emailModule.js</file>
-            <file>file:/Users/apple/Desktop/ez/web/indexDirectLogin.html</file>
-            <file>file:/Users/apple/Desktop/ez/web/index.html</file>
+            <file>file:/Users/lishaliu/Documents/sprint7/0823/web/javascripts/onsip.js</file>
+            <file>file:/Users/lishaliu/Documents/sprint7/0823/web/emailModule.html</file>
+            <file>file:/Users/lishaliu/Documents/sprint7/0823/web/index.html</file>
+            <file>file:/Users/lishaliu/Documents/sprint7/0823/src/java/org/ez/view/AccountServlet.java</file>
+            <file>file:/Users/lishaliu/Documents/sprint7/0823/web/contactsModule.html</file>
+            <file>file:/Users/lishaliu/Documents/sprint7/0823/web/javascripts/main.js</file>
+            <file>file:/Users/lishaliu/Documents/sprint7/0823/src/java/org/ez/view/EZAccessServlet.java</file>
+            <file>file:/Users/lishaliu/Documents/sprint7/0823/web/videoChatModule.html</file>
+            <file>file:/Users/lishaliu/Documents/sprint7/0823/web/javascripts/videoChatModule.js</file>
+            <file>file:/Users/lishaliu/Documents/sprint7/0823/web/accountSettings.html</file>
         </group>
     </open-files>
 </project-private>

@@ -2,23 +2,69 @@
 To change this template, choose Tools | Templates
 and open the template in the editor.
 -->
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE>
 <html>
   <head>
     <title></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <style>
+    <meta charset="UTF-8">
+        <link rel="stylesheet" href="css/onsip.css">
+        <script type="text/javascript" src="http://sipjs.com/download/sip-0.6.4.min.js"></script>
+        <script type="text/javascript" src="javascripts/videoChatModule.js"></script>
+        <script type="text/javascript" src="javascripts/sjcl.js"></script>
+	<script type="text/javascript" src="javascripts/jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="javascripts/jquery-ui-1.8.13.custom.min.js"></script>
+	<script type="text/jaavascript" src="javascripts/json2.js"></script>
+	<script type="text/javascript" src="javascripts/jkarma.js"></script>
+	<script type="text/javascript" src="javascripts/utils.js"></script>
 
+	<script type="text/javascript" src="javascripts/jquery-css-transform.js"></script>
+	<script type="text/javascript" src="javascripts/rotate3Di.js"></script>
+	<script type="text/javascript" src="javascripts/emailHelperFunctions.js"></script>
+        <script type="text/javascript" src="javascripts/emailClickHandlers.js"></script>
+        <script type="text/javascript" src="javascripts/translate.js"></script>
 
-        </style>
+	<script type="text/javascript" src="javascripts/voice.js"></script>
+       	<script type="text/javascript" src="javascripts/swfobject.js"></script>
+        <script type="text/javascript" src="javascripts/contactsModule.js"></script>
+	<script type="text/javascript" src="javascripts/main.js"></script>
+	<script type="text/javascript" src="javascripts/emailModule.js"></script>
+
+	<script type="text/javascript" src="javascripts/albumModule.js"></script>
+	<script type="text/javascript" src="javascripts/chatModule.js"></script>
+        <script type="text/javascript" src="javascripts/screensaver.js"></script>
+          <script type="text/javascript" src="javascripts/onsip.js"></script>
+        <script type="text/javascript" src="javascripts/gallery.js"></script>
+        <LINK rel="stylesheet" type="text/css" href="resources/gallery_contacts.css">
+        
+	<LINK rel="stylesheet" type="text/css" href="resources/newcss.css">
+        <LINK rel="stylesheet" type="text/css" href="resources/chat_module.css">
   </head>
   <body>
-
+   <div id="videoChatModule">
+      <button id="auth-button" style="position:absolute;bottom:100px; right:100px;z-index:5000">Authorization</button>
+    <div id="user-agent">
+      <button id="invite-button">Video Call</button>
+      <video id="remote-media"></video>
+     <button id="invite-button1">Voice Call</button>
+      <audio id="remote-media1"></audio>
+      <button id="accept-button" disabled>Accept</button>
+      <button id="terminate-button" disabled>Terminate</button>
+      
+      <button id="mute-button" class="off" style="position:absolute;bottom:50px; right:100px;z-index:5000;font-size:100%">Mute</button>
+  
+          
+       <input type="range" id="volume-range" min="0" max="100" value="50" style="position:absolute;bottom:100px; right:100px;z-index:5000"/>
     
+     
+    </div>
+  
   <!--  <img onclick="clickModuleButton('videoChatModule');" style="position:absolute;left:785px;top:-15px;z-index:10;display:none" src="images/videoChat/retina-close-button.png" id="videoClose"/>-->
 
     <div style="position: absolute;z-index:1;display:none" id="videochatWrapper" class="videoChatContents">
         <div id="videochatswf"></div>
     </div>
+  </div>
+        <script type="text/javascript" src="http://sipjs.com/download/sip-0.6.4.min.js"></script>
+        <script type="text/javascript" src="javascripts/videoChatModule.js"></script>
   </body>
 </html>

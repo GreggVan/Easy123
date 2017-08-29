@@ -75,6 +75,7 @@ function paginateContacts(contacts) {
 function selectContacts() {
      $('#EmailInstructions').hide();
     $('#backButton').hide();$('#moreButton').hide();  
+     $('#videoscreen').hide();
     var curPage=window.contactBookPreviousState.currentPage;
     
     if(curPage<window.contactBookPreviousState.lastPage)

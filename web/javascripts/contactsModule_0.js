@@ -15,7 +15,6 @@ function initContactsModule() {
         sendRequest("account", {action:"getContacts"}, function(response){
 		log('fetching contacts');
 		userData.contacts = response.contacts;
-                
 		jKarmaAddFunction(userData.contacts, 'profilePicture', profilePicture);
 		jKarmaAddFunction(userData.contacts, 'name', name);
 		log('done fetching contacts');
@@ -60,7 +59,8 @@ function selectContact(index) {
 }
 
 function showContacts() {
-	$('#contactTrash').show();
+	//$('#contactTrash').show();
+         //$('#auth-button').show();
         var addressBook = $('#addressBook');
 	var pos = $('#contactsButton').position();
 	addressBook.css({
@@ -71,6 +71,7 @@ function showContacts() {
 		opacity: 0
 	});
 	addressBook.show();
+       
 	addressBook.animate({
         'left': '350px',
         'top': '20px',
@@ -80,10 +81,12 @@ function showContacts() {
     });
     $('#Header').show();
     $('#EmailInstructions').hide();
-    if(window.contactBookPreviousState.isPerson=='true')
+    if(window.contactBookPreviousState.isPerson=='true'){
        displayContact(window.contactSubset[window.contactBookPreviousState.personIndex]);
+   }
     else 
         selectContacts();
+
   
 }
 function showContactsFromEmail() {

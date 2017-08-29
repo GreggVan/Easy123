@@ -90,25 +90,24 @@ public class AccountServlet extends JsonServlet {
                 user.setContactBookType(Integer.parseInt(req.getParameter("contactBookType")));
                 user.setLang(req.getParameter("lang"));
                 user.setFilter(req.getParameter("filter"));
-                user.setScreensaverwaitTime(req.getParameter("screensaverwaittime"));
+                user.setScreensaverwaitTime(req.getParameter("screensaverwaitTime"));
 		System.out.println("#####%%%%%"+req.getParameter("filter"));
 		String s = req.getParameter("passwordRequired");
 		user.setPasswordRequired((s!=null && s.toLowerCase().equals("true")));
 		
-                user.setPasswordRequired((s!=null && s.toLowerCase().equals("true")));
                 
-                String ef=req.getParameter("emailfunction");
+                String ef=req.getParameter("emailFunction");
                 user.setEmailFunction((ef!=null && ef.toLowerCase().equals("true")));
                 
                 
-                String af=req.getParameter("albumfunction");
+                String af=req.getParameter("albumFunction");
                 user.setAlbumFunction((af!=null && af.toLowerCase().equals("true")));
                 
                 
-                String cf=req.getParameter("contactsfunction");
+                String cf=req.getParameter("contactsFunction");
                 user.setContactsFunction((cf!=null && cf.toLowerCase().equals("true")));
                 
-                user.setScreenSaverType(Integer.parseInt(req.getParameter("screensaverType")));
+                user.setScreenSaverType(Integer.parseInt(req.getParameter("screenSaverType")));
 		//check userkey uniqueness
 		String value;
 		if((value=req.getParameter("userKey"))!=null && value.equals(user.getUserKey())==false) {
@@ -160,7 +159,8 @@ public class AccountServlet extends JsonServlet {
 			user.removeFromContacts(contact);
 			contact = (Person) session.get(Person.class, contact.getId());
 			if(contact!=null) {
-				session.update(user);
+				//session.update(user);
+                                session.merge(user);
 				session.delete(contact);
 			}
 		}

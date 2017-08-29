@@ -87,8 +87,6 @@ function initAppDirectly() {
 
 function initApp() {
         sendRequest('ezaccess', {action:"init"}, processLoginResponse);
-        
-        
         var deviceAgent = navigator.userAgent.toLowerCase();
         var ios=deviceAgent.match(/(iphone|ipod|ipad)/);
         window.isIos=false;
@@ -137,7 +135,8 @@ function initApp() {
 
 		}
 	);
-            
+
+
             
         //screen saver    
         $(document).mousemove(clearScreensaver); 
@@ -153,11 +152,13 @@ function login() {
 	var request = {action:'login', userKey:form.userKey.value, password:form.password.value};
 	//var button = $(form).find('[type=submit]').attr('disabled', true);
 	$('#loading').show();
+        console.log(request);
 	sendRequest('ezaccess', request, processLoginResponse);
 }
 
 /** called when the server responds from initApp() or login() to process the response. */
 function processLoginResponse(response) {
+         console.log(response);
                  var array=new Array();
                  array=response.lang;
                  //console.log(response.lang);
@@ -178,8 +179,58 @@ function processLoginResponse(response) {
 		}
 		document.forms.loginForm.password.focus();
 	}
-	else if(response.ok){
-          
+        else if(response.ok) {
+            loginSuccess(response);
+	}
+        else if(response.hashedPassword){
+            var password = sjcl.decrypt("password", response.hashedPassword);           
+            passwordTyped=document.getElementById("password").value;          
+            if(password===passwordTyped){
+               //loginsuccssfully
+               	var form = document.forms.loginForm;
+                var request = {action:'login', userKey:form.userKey.value, password:"matched"};
+                sendRequest('ezaccess', request, loginSuccess);
+                console.log("password matched");
+            }
+            else{
+
+                console.log("password unmatched");
+            }
+            }
+                
+        
+	/*else if(response.ok){
+           // $('#menu').show();
+                console.log(response.userkey);
+                if(response.assistant) {
+			$('#menu').show();
+		}
+		log('already logged in with', response.name);
+		userData.name = response.name;
+                if(userData.name=="Elaine Trace") //Demo account for Elaine alone :)
+                    window.DEMO=true;
+//		$('#logout').attr("href", response.logoutURL);
+                userData.contactBookType=response.contactBookType;
+                userData.emailFilter=response.emailFilter;
+                
+		$('#login').hide();
+                $.getScript("javascripts/contactsModule_"+userData.contactBookType+".js", function() {
+                    loadModules();
+                });
+
+
+	}*/
+	else {
+		$('#login').show();
+		document.forms.loginForm.userKey.focus();
+	}
+}
+function loginSuccess(response){
+                 var array=new Array();
+                 array=response.lang;
+                 //console.log(response.lang);
+                 window.language=response.language;
+                 window.languageData=array;
                 if(response.assistant) {
 			$('#menu').show();
 		}
@@ -193,21 +244,16 @@ function processLoginResponse(response) {
                 userData.emailFuction=response.emailFunction;
                 userData.albumFunction=response.albumFunction;
                 userData.contactsFuction=response.contactsFuction;
-                userData.screensaverType=response.screensaverType;
-                window.screenSaverWaitTime=response.screensaverwaittime;
-                userData.screensaverType=response.screensaverType;
-                window.log(userData.screensaverType);
+                userData.screensaverType=response.screenSaverType;
+                if(response.screensaverwaitTime!=null){
+                window.screenSaverWaitTime=response.screensaverwaitTime;}
+                window.log( window.screenSaverWaitTime);
+   
 		$('#login').hide();
+             
                 $.getScript("javascripts/contactsModule_"+userData.contactBookType+".js", function() {
                     loadModules();
-                });
-
-
-	}
-	else {
-		$('#login').show();
-		document.forms.loginForm.userKey.focus();
-	}
+                });         
 }
 
 function showSignUp() {
@@ -278,7 +324,9 @@ function loadModules() {
                 e.preventDefault();
         }});
    if (userData.emailFuction!=true){
-        $('#mail').hide();}
+        $('#mail').hide();
+        $('#mail_notes').hide();
+    }
     if (userData.albumFunction!=true){
         $('#albumButton').hide();
     }

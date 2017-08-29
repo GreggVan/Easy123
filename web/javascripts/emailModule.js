@@ -37,7 +37,7 @@ function initEmailModule() {
 	
         initMail(); //init the Mail environment like tray, trash etc..,
 	emailModule.shouldCheckForNewEmails = true;
-	
+        checkForNewEmails();
 }
 
 /** fetches the emails from server, and inits them. */
@@ -301,12 +301,16 @@ function initPrefetchedEmails() {
  */
 //FIXME if server gets error on this, the ping stops
 function checkForNewEmails() {
-	emailModule.emailCheckTimer = null;
-	
+      window.animationLock=true;
+      setTimeout(function(){window.animationLock=false;console.log("released");},1220);
+        emailModule.emailCheckTimer = null;
+	console.log(emailModule.shouldCheckForNewEmails);
 	if(emailModule.shouldCheckForNewEmails) {
 		log('checking for new emails');
 		emailModule.newEmailsRequest = sendRequest('email', {action:'checkForNewEmails'}, function(response) {
+                    emailModule.shouldCheckForNewEmails=true;   
                         console.log(emailModule.numNewEmails);
+                        console.log(response.newEmails);
 			if(response.newEmails>emailModule.numNewEmails) {
 				//we have new emails so prefetch them
                                 var prevCount=emailModule.numNewEmails;
@@ -315,7 +319,6 @@ function checkForNewEmails() {
                                 var diff=response.newEmails-prevCount;
 				sendRequest('email', {action:'getNewEmails',limit:diff}, function(response) {
 					log('prefetching emails');
-                           
                                         var emails=filterEmails(response.emails);
                                         emails=filterPhantomEmails(emails);
                                         if(emails.length>0) {

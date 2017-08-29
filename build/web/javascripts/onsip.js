@@ -1,23 +1,44 @@
 /* This is the MyApp constructor. */
- /*var audio = new Audio('resources/ringbell.mp3');
+ var audio = new Audio('resources/ringbell.mp3');
+ var audio2 = new Audio('resources/callout.mp3');
+ //var audio3 = new Audio('resources/busytone.mp3');
 function MyApp() {
   //this.addressInput = document.getElementById('address-input');
   //this.passwordInput = document.getElementById('password-input');
- 
+  this.getChatInfo();
   this.identityForm = document.getElementById('auth-button');
   if(this.identityForm){
   this.identityForm.addEventListener('click', function (e) {
     e.preventDefault();
+    //this.getChatInfo();
     this.requestCredentials();
   }.bind(this), false);}
 
   this.userAgentDiv = document.getElementById('user-agent');
-  this.remoteMedia = document.getElementById('remote-media');
+  this.videoCall = document.getElementById('invite-button');
+  this.remoteMedia = document.getElementById('remote-media1');
+      this.videoCall.addEventListener('click', function(){
+      this.remoteMedia = document.getElementById('remote-media');
+      this.remoteMedia.volume = 0.5;
+      //this.inviteButton = document.getElementById('invite-button');
+       this.sendInvite();
+      }.bind(this), false);
+
+    this.voiceCall = document.getElementById('invite-button1');
+    this.voiceCall.addEventListener('click', 
+  function(){
+      this.remoteMedia = document.getElementById('remote-media1');
+      this.remoteMedia.volume = 0.5;
+      //this.inviteButton = document.getElementById('invite-button1');
+      this.sendInvite();
+      }.bind(this), false);
+
+  /*this.remoteMedia = document.getElementById('remote-media');
   this.remoteMedia.volume = 0.5;
 
   //this.destinationInput = document.getElementById('destination-input');
   this.inviteButton = document.getElementById('invite-button');
-  this.inviteButton.addEventListener('click', this.sendInvite.bind(this), false);
+  this.inviteButton.addEventListener('click', this.sendInvite.bind(this), false);*/
 
   this.acceptButton = document.getElementById('accept-button');
   this.acceptButton.addEventListener('click', this.acceptSession.bind(this), false);
@@ -36,15 +57,25 @@ function MyApp() {
   this.muteButton.addEventListener('click', this.toggleMute.bind(this), false);
 }
 
-/* This is the MyApp prototype. 
+/* This is the MyApp prototype. */
 MyApp.prototype = {
-
+    getChatInfo: function(){
+     sendRequest('account', {action:'getChatId'}, function(response) {
+         //console.log(response.chatId);
+			videoChatModule.chatId=response.chatId;
+                        chatPassword=sjcl.decrypt("password", response.chatPassword);
+                        //console.log(videoChatModule.chatId);
+                        videoChatModule.chatPassword=chatPassword;
+			});
+                   
+    },
+    
   requestCredentials: function () {
     var xhr = new XMLHttpRequest();
     xhr.onload = this.setCredentials.bind(this);
     xhr.open('get', 'https://api.onsip.com/api/?Action=UserRead&Output=json');
 
-    var userPass = 'lishaliu94@easy123.onsip.com' + ':' + 'lls1994@UMD';
+    var userPass = videoChatModule.chatId + ':' + videoChatModule.chatPassword;
     xhr.setRequestHeader('Authorization',
                          'Basic ' + btoa(userPass));
     xhr.send();
@@ -57,7 +88,7 @@ MyApp.prototype = {
     if (xhr.status === 200) {
       user = JSON.parse(xhr.responseText).Response.Result.UserRead.User;
       credentials = {
-        uri: "lishaliu94@easy123.onsip.com",
+        uri: videoChatModule.chatId,
         authorizationUser: user.AuthUsername,
         password: user.Password,
         displayName: user.Contact.Name
@@ -83,9 +114,6 @@ MyApp.prototype = {
       session.reject();
       return;
     }
-
-    this.setSession(session);
-
     this.setStatus('Ring Ring! ' + session.remoteIdentity.uri.toString() + ' is calling!', true);
     audio.play();
     this.acceptButton.disabled = false;
@@ -96,32 +124,45 @@ MyApp.prototype = {
 
     this.acceptButton.disabled = true;
     this.session.accept(this.remoteMedia);
-    console.log('mute');
+    //console.log(this.session);
     audio.pause();
     audio.currentTime = 0;
   },
 
   sendInvite: function () {
-    var destination = "lu.gan2@umdeasy123.onsip.com";
+    var destination = window.contacts.chatId;
     if (!destination) { return; }
     var session = this.ua.invite(destination, this.remoteMedia);
     this.setSession(session);
-    this.inviteButton.disabled = true; // TODO - use setStatus. Disable input, too?
+    audio2.play();
+
+     
+      this.voiceCall.disabled = true;
+    this.videoCall.disabled = true;
+ 
+    
+   
+    // TODO - use setStatus. Disable input, too?
   },
 
   setSession: function (session) {
     session.on('progress', function () {
       this.setStatus('progress', true);
+
     }.bind(this));
 
     session.on('accepted', function () {
       this.setStatus('accepted', true);
+      audio2.pause();
+      audio2.currentTime = 0;
     }.bind(this));
 
     session.on('failed', function () {
       this.setStatus('failed', false);
       if (session === this.session) {
         delete this.session;
+      audio2.pause();
+      audio2.currentTime = 0;
       }
     }.bind(this));
 
@@ -129,6 +170,8 @@ MyApp.prototype = {
       this.setStatus('bye', false);
       if (session === this.session) {
         delete this.session;
+         audio2.pause();
+      audio2.currentTime = 0;
       }
     }.bind(this));
 
@@ -142,7 +185,14 @@ MyApp.prototype = {
 
   setStatus: function (status, disable) {
     this.userAgentDiv.className = status;
-    this.inviteButton.disabled = disable;
+    
+
+      this.voiceCall.disabled = disable;
+
+         this.videoCall.disabled = disable;
+
+    /*this.voiceCall.disabled= disable*/
+    /*this.videoCall.disabled = disable;*/
     this.terminateButton.disabled = !disable;
   },
 
@@ -152,7 +202,8 @@ MyApp.prototype = {
     this.session.terminate();
     audio.pause();
     audio.currentTime = 0;
-  },
+    audio2.pause();
+    audio2.currentTime = 0;  },
 
   sendDTMF: function (tone) {
     if (this.session) {
@@ -179,85 +230,17 @@ MyApp.prototype = {
 
 };
 
-var MyApp = new MyApp();*/
-
-
+var MyApp = new MyApp();
 
 var videoChatModule={
-    contactId :""
+    chatId :"",
+    chatPassword:"",
+    contactId :"",
 };
 
-
-function callContact(contact) {
-    window.contacts={
-    //contactName="",
-    chatId:"",
-    };
-
-//alert(contact.name());
-var str=contact.chatId;
-
-window.contacts.chatId=str;
-//console.log(window.contacts.chatId);
-//console.log(contact);
-sendContactId(str);
-$("#personNotAvailable").hide();
-$("#contacts").hide();
-$("#Header").hide();
-$("#videoscreen").show();
-$("#videoscreen").load('videoChatModule.html');
-//$('#videoChatModule').show();
-                  //$("#loading").show();
-}
-
-function showVideoChat() {
-                $("#loading").show();
-                
-		var flashvars = {
-			name:"rpn2142",
-			callee:"ramraj",
-                        calleeTmp: videoChatModule.contactId,
-			service:"http://easy1234.org/cgi-bin/reg.py"
-		};
-		var params = {
-			menu: "false",
-			scale: "noScale",
-			allowFullscreen: "true",
-			allowScriptAccess: "always",
-			bgcolor: "",
-			wmode: "transparent" // can cause issues with FP settings & webcam
-		};
-		var attributes = {
-			id:"VideoPhoneLabs"
-		};
-
-                //$('#videoChatModule').css('position','absolute');
-                //$('#videoChatModule').css('left','300px');
-
-		swfobject.embedSWF(
-			"flash/VideoPhoneLabs.swf",
-			"videochatswf", "820", "700", "10.0.0",
-			"flash/expressInstall.swf",
-			flashvars, params, attributes,onSWFLoad);
-
-
-
-}
-function onSWFLoad() {
-                $('#videoChatModule').show();
-                $('.videoChatContents').show();
-                $("#loading").hide();
-                setTimeout("$('#videoClose').show()",5000);
-    
-}
-function hideVideoChat(){
-   // $('.videoChatContents').hide();
-   // $('#videoClose').hide();
-   // $("#videochatWrapper").remove();
-   //$("#page").unload('videoChatModule.html');
-    $("#page").hide();
-    initContactsModule();
-    showContacts();
-    //$("#videoChatModule").append("<div style='position: absolute;z-index:1' id='videochatWrapper' class='videoChatContents'><div id='videochatswf'></div></div>");
-    
-}
+function sendContactId(contactId){
+      videoChatModule.contactId=contactId;
+      this.contactId=contactId;
+    //console.log(this.contactId);
+    //console.log(videoChatModule.contactId);
+  };

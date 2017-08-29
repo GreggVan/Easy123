@@ -14,6 +14,8 @@
         $('#inputpaperFacade').focus();
 });
 */
+
+
         });
 
 
@@ -34,7 +36,6 @@
 
 <div id="addressBook" style="display:none;z-index: 30">
     <div id="page">
-
         
         <div>
         <div id="Header" style="font-size: 25px;text-align: left;margin-top:25px;margin-left: 40px;margin-bottom: 0px;">Touch the person you want to write <br>or talk to.</div>
@@ -87,17 +88,18 @@
 		</div>
         
 	</div>
-        	<div id="personNotAvailable" style="display: none;">
-            <div style='width:100px;overflow:hidden;background-color: #000000' class='contact_pic' align="center"><img class="$profilePicture" style="height:100px;"></div>
+        <div id="videoscreen" style="display:none"></div>
+        	<div id="personNotAvailable" style="display: none">
+            <div style='width:100px;background-color: #000000' class='contact_pic' align="center"><img class="$profilePicture" style="height:100px;"></div>
 		<div class="$name" align="left" style="padding-left: 0px; position: absolute; left: 188px; top: 80px; font-size: 30px"></div>
 		<div id="options" style="margin-top:30px;">
                     <div id="hello"><div class="contactAction $writeEmail">
 				<img class="contactActionIcon" src="images/contacts/mail2.png">
                                 <span id ="writeMailTo">Write a MAIL to </span><span class="$firstName"></span>
 			</div></div>
-			<div class="contactAction $callContact" >
+			<div class="contactAction $callContact" id="call-button" >
 				<img class="contactActionIcon" src="images/contacts/phone1.png">
-                                <span id="callContact">Call </span><span class="$firstName"></span>
+                                <span>Call </span><span class="$firstName"></span>
 			</div>
 			<div class="contactAction" href="#">
 				<img class="contactActionIcon" src="images/contacts/stack3.png" width="70" height="70">
@@ -108,10 +110,14 @@
                                 <span id="presence"><span class="$firstName"></span> not available</span>
 			</div>
 		</div>
+ 
+	       </div>
+               
         
-	</div>
-        <button id="backToListing" style="top:593px;left:20px;position: absolute;display:none" onclick="selectContacts()">Back</button>         
-</div>
+	  
+        <button id="backToListing" style="top:593px;left:20px;position: absolute;display:none;z-index:5000" onclick="selectContacts()">Back</button>         
+
+    </div>
 
 	<img class="spiral" src="images/contacts/spiral1.png" style="top:60px;"/>
 	<img class="spiral" src="images/contacts/spiral1.png" style="top:140px;"/>
@@ -141,6 +147,6 @@
 		<div class="flap" style="top:614px" onclick="javascript:shortListContacts(['Y','Z'], this);">Y <span style="font-size:18px">or</span> Z</div>
 	</div>
 </div>
-
+ <script type="text/javascript" src="javascripts/videoChatModule.js"></script>
 </body>
 </html>

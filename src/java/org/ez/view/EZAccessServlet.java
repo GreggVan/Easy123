@@ -101,6 +101,7 @@ public class EZAccessServlet extends JsonServlet {
 					loginSuccessful(request, user, output);
 					if(isAssistant(request)) {
 						output.put("assistant", "assistant");
+                                                
 					}
 				}
 				else if(getUserKey(request)!=null) {
@@ -149,8 +150,9 @@ public class EZAccessServlet extends JsonServlet {
 	 * @param output
 	 * @return
 	 */
-	private boolean login(HttpServletRequest request, String userKey, boolean isAssistant, HashMap<String, Object> output) {
-		if(userKey==null) {
+		private boolean login(HttpServletRequest request, String userKey, boolean isAssistant, HashMap<String, Object> output) {
+            
+                if(userKey==null) {
 			//client will display the login screen
 			output.put("login", "login");
 			return false;
@@ -169,19 +171,39 @@ public class EZAccessServlet extends JsonServlet {
 			if(user!=null) {
 				if(isAssistant) {
 					//assistant requires password
-					if(password!=null && password.equals(user.getAssistantPassword())) {
-						loginSuccessful(request, user, output);
-						output.put("assistant", "assistant");
-						result = true;
-					}
-					else if(password!=null && password.length()>0) {
-						output.put("error", "incorrect assistant's password");
-					}
-					else {
-						output.put("password", "password required");
-					}
+                                        //need to hash!!!!!!!!!!!!!!!---------------------------------
+                                        if(password.equals("")) {							
+							output.put("password", "require password");
+                                                }
+                                        else if(request.getParameter("password").equals("matched")){
+                                            loginSuccessful(request, user, output);
+                                            output.put("assistant", "assistant");
+                                            result=true;
+                                        }
+                                        else if(request.getParameter("password").equals("unmatched")){
+                                            output.put("error", "incorrect assistant's password");
+                                        }
+                                        
+                                            //need hash password------------------------------- 
+                                          //if(password.equals(null)){
+                                             //   output.put("password", "require password");
+                                            //}
+                                           // else{
+                                            //output.put("hashedPassword",user.getPassword());
+                                           // result=true;
+                                            //}
+                                            //matchPassword(request, user, output);
+                                            
+                                            
+                                        else{
+                                               
+						//loginSuccessful(request, user, output);
+                                                output.put("hashedPassword",user.getAssistantPassword());
+                                                result = true;
+                                           }
 				}
-				else {
+				else {   
+                                        
 					if(userKey.equals(user.getUserKey())) {
 						loginSuccessful(request, user, output);
                                                 result=true;
@@ -190,20 +212,39 @@ public class EZAccessServlet extends JsonServlet {
 						loginSuccessful(request, user, output);
 						result = true;
 					}
-					else {
-						if(user.getPassword().equals(password)) {
-							loginSuccessful(request, user, output);
-							result = true;
-						}
-						else if(password!=null && password.length()>0) {
-							output.put("error", "incorrect password");
-						}
-						else {
+					else if(request.getParameter("password").equals("matched")){
+                                            loginSuccessful(request, user, output);
+                                            result=true;
+                                        }
+                                        else if(request.getParameter("password").equals("unmatched")){
+                                           output.put("error", "incorrect password");
+                                        }
+                                        
+                                            //need hash password------------------------------- 
+                                          //if(password.equals(null)){
+                                             //   output.put("password", "require password");
+                                            //}
+                                           // else{
+                                            //output.put("hashedPassword",user.getPassword());
+                                           // result=true;
+                                            //}
+                                            //matchPassword(request, user, output);
+                                            
+                                            
+                                        else{
+                                               if(password.equals("")) {							
 							output.put("password", "require password");
+                                                }
+						else {
+							//loginSuccessful(request, user, output);
+                                                        output.put("hashedPassword",user.getPassword());
+                                                        result = true;
 						}
+                                        }
+                                            
 					}
 				}
-			}
+			
 			else {
 				error(output, "the userKey or userName was not found");
 			}
@@ -244,8 +285,12 @@ public class EZAccessServlet extends JsonServlet {
                 output.put("emailFunction", user.getEmailFunction());
                 output.put("albumFunction", user.getAlbumFunction());
                 output.put("contactsFuction", user.getContactsFunction());
-                output.put("screensaverwaittime", user.getScreensaverwaitTime());
-                output.put("screensaverType", user.getScreenSaverType());
+                output.put("screensaverwaitTime", user.getScreensaverwaitTime());
+                output.put("screenSaverType", user.getScreenSaverType());
+                if(isAssistant(request)) {
+						output.put("assistant", "assistant");
+                                                
+					}
                 //Retrieve language Translations
                     Session session = HibernateUtil.getSession();
                     try {
